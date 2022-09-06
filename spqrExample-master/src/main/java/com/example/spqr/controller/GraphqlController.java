@@ -4,12 +4,12 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.example.spqr.resolver.PlanetaResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.spqr.resolver.UserResolver;
 
 import graphql.ExecutionResult;
 import graphql.GraphQL;
@@ -27,13 +27,13 @@ public class GraphqlController {
 	private final GraphQL graphQL;
 
 	@Autowired
-	public GraphqlController(UserResolver userResolver) {
+	public GraphqlController(PlanetaResolver planetaResolver) {
 		GraphQLSchema schema = new GraphQLSchemaGenerator().withResolverBuilders(
 				// Resolve by annotations
 				new AnnotatedResolverBuilder(),
 				// Resolve public methods inside root package
 				new PublicResolverBuilder("com.graphql.userPoc"))
-				.withOperationsFromSingleton(userResolver, UserResolver.class)
+				.withOperationsFromSingleton(planetaResolver, PlanetaResolver.class)
 				.withValueMapperFactory(new JacksonValueMapperFactory()).generate();
 		graphQL = GraphQL.newGraphQL(schema).build();
 	}
